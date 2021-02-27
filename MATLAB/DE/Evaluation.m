@@ -1,5 +1,5 @@
 % Evaluation
-function f_penalty = Evaluation(gen, X, r, f, g, h)
+function f_penalty = Evaluation(gen, X, r, f, g, h, release)
     global history;
     delta = 1e-6;
     
@@ -16,6 +16,8 @@ function f_penalty = Evaluation(gen, X, r, f, g, h)
     SD = std(f);
     worst = max(f);
     best = min(f);
-    fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', gen, mean_, median_, SD, mean(f_penalty), best, worst, MV);
+    if ~release
+        fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', gen, mean_, median_, SD, mean(f_penalty), best, worst, MV);
+    end
     history = [history; gen, mean_, median_, SD, mean(f_penalty), best, worst, MV];
 end

@@ -6,9 +6,11 @@ global history;
 %% Parameters needed to be changed
 % Choose the problem optimized
 Prob_index = 1;
+% Debug or Release(0, 1), release will minimize visualize output
+release = 1;
 % Coefficient of iterations
 C_i = 1;
-Total_i = 1;
+Total_i = 30;
 % Parammeters of PSO
 F = 0.6;
 Cr = 0.8;
@@ -20,13 +22,17 @@ Gen = ceil(5e4/NP)*C_i;
 %% Iteration
 % 30 iterations
 for i=1:Total_i
+    history = [];
     % Initialization
     X = Initialization(D_size, NP, Xmax, Xmin);
     
-    fprintf('Gen        Mean         Median         SD         Fit         Best         Worst         MV\n');
+    % Title
+    if(i==1 || release==0)
+        fprintf('Gen        Mean         Median         SD         Fit         Best         Worst         MV\n');
+    end
     
     [f, g, h] = cec20_func(X, Prob_k);
-    f_penalty = Evaluation(0, X, r, f, g, h);
+    f_penalty = Evaluation(0, X, r, f, g, h, release);
 
     for gen=1:Gen
         %Mutation
@@ -40,7 +46,7 @@ for i=1:Total_i
         
         % Evaluation
         [f, g, h] = cec20_func(X, Prob_k);
-        Evaluation(gen, X, r, f, g, h);
+        Evaluation(gen, X, r, f, g, h, release);
         
         if mod(gen,10) == 0
             r = r+r_inc;
@@ -54,6 +60,10 @@ for i=1:Total_i
     if exist(path,'dir')~=7
         mkdir(path);
     end
-    fprintf("Saving...the %d\n", i);
+    if release
+        fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', i, history(end,2), history(end,3), history(end,4), history(end,5), history(end,6), history(end,7), history(end,8));
+    else
+        fprintf("Saving...the %d\n", i);
+    end
     xlswrite([path,'/',int2str(i),'.xlsx'], history);
 end
