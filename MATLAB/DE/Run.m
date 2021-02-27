@@ -5,15 +5,15 @@ global history;
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 1;
+Prob_index = 2;
 % Debug or Release(0, 1), release will minimize visualize output
-release = 1;
+release = 0;
 % Coefficient of iterations
-C_i = 1;
+C_i = 2;
 Total_i = 30;
-% Parammeters of PSO
-F = 0.6;
-Cr = 0.8;
+% Parammeters of DE
+F = 0.8;
+Cr = 0;
 
 %% Parameters init
 [Prob_k, D_size, NP, Xmin, Xmax, r, r_inc] = Parameters(Prob_index);
