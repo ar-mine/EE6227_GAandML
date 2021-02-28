@@ -14,5 +14,5 @@ function [f, obj_fun, MV] = Obj_Function(X, r, Prob_k)
     
     
     obj_fun = f + [g_norm.^2 h_norm.^2]*r;
-    MV = mean([max(g,0) max(h,0)], 'omitnan');
+    MV = mean([g_norm h_norm], 'all');
 end

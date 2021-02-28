@@ -1,33 +1,33 @@
-% SaDE algorithm
+% DE algorithm
 clc;clear;
 global Xmin Xmax;
 global history;
-global Crmean Cr
+global c Cr mu_Cr F mu_F A_set p
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 2;
+Prob_index = 6;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
 C_i = 2;
 Total_i = 30;
+% Parammeters of DE
+ c = 0.05;
+ p = 0.15;
 
 %% Parameters init
 [Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
-% Parammeters of DE
-LP = ceil(Gen*0.3);
-diff = 0.1;
 
 %% Iteration
 % 30 iterations
 for i=1:Total_i
-    history = [];
-    Crmean = 0.5;
     r = rc;
-    success_rate = zeros(1, 4);
-    count = zeros(1, 4);
+    A_set = [];
+    mu_Cr = 0.5;
+    mu_F = 0.5;
+   
     % Initialization
     X = Initialization(D_size, NP, Xmax, Xmin);
     
@@ -35,25 +35,30 @@ for i=1:Total_i
     if(i==1 || release==0)
         fprintf('Gen        Mean         Median         SD         Fit         Best         Worst         MV\n');
     end
+    
     Record(0, X, r, Prob_k);
-    pdrand = [0 0.25 0.5 0.75];
-    for g=1:LP
-        F = normrnd(0.5 ,diff, NP, 2);
-        Cr = normrnd(Crmean ,0.1, 1);
+    
+    for g=1:Gen
+        Cr = normrnd(mu_Cr ,0.1, NP, 1);
+        Cr(Cr<0) = 0;
+        Cr(Cr>1) = 1;
         
-        rand_temp = rand();
-        strategy = sum(rand_temp>pdrand);
-
+        F_rand = rand(NP, 1);
+        F = mu_F + 0.1*tan(pi*(F_rand-0.5));
+        F(F>1) = 1;
+        while sum(F<0) ~= 0
+            F_rand = rand(sum(F<0), 1);
+            F(F<0) = mu_F + 0.1*tan(pi*(F_rand-0.5));
+            F(F>1) = 1;
+        end
         %Mutation
-        V = Mutation(X, F, strategy);
+        V = Mutation(X, F);
 
         % Recombination(Binominal/uniform Crossover)
         U = Recombination(V, D_size, NP, Cr, X);
 
         % Selection
-        [X, success] = Selection(U, X, r, Prob_k);
-        success_rate(strategy) = success_rate(strategy)+success;
-        count(strategy) = count(strategy)+1;
+        X = Selection(U, X, r, Prob_k);
 
         % Record
         Record(g, X, r, Prob_k);
@@ -61,31 +66,8 @@ for i=1:Total_i
             r = r+r_inc;
         end
     end
-    success_rate = success_rate./count/(NP*D_size);
-    success_rate = success_rate/sum(success_rate);
-    pdrand = cumsum(success_rate)-success_rate(1);
-    for g=LP+1:Gen
-        F = normrnd(0.5 ,diff, NP, 2);
-        Cr = normrnd(Crmean ,0.1, 1);
-        
-        rand_temp = rand();
-        strategy = sum(rand_temp>pdrand);
-
-        %Mutation
-        V = Mutation(X, F, strategy);
-
-        % Recombination(Binominal/uniform Crossover)
-        U = Recombination(V, D_size, NP, Cr, X);
-
-        % Selection
-        [X, success] = Selection(U, X, r, Prob_k);
-
-        % Record
-        Record(g, X, r, Prob_k);
-        if mod(g,10) == 0
-            r = r+r_inc;
-        end 
-    end
+    
+    % Save output information
     if Prob_k>=10
         path = ['./SAVE/','RC',int2str(Prob_k)];
     else

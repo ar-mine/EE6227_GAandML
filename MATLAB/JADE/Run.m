@@ -1,24 +1,41 @@
+% DE algorithm
 clc;clear;
+global Xmin Xmax;
+global history;
+global c Cr mu_Cr F mu_F A_set p
 
+%% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 9;
+Prob_index = 4;
+% Debug or Release(0, 1), release will minimize visualize output
+release = 0;
+% Coefficient of iterations
+C_i = 2;
+Total_i = 30;
+% Parammeters of DE
+ c = 0.05;
+ p = 0.1;
 
-global Xmin Xmax
-global history A_set
-global c Cr mu_Cr F mu_F
-[Prob_k, D_size, NP, Xmin, Xmax, r, r_inc] = Parameters(Prob_index);
-Gen = ceil(5e4/NP)*2; 
-% 0.05->0.2
-c = 0.05;
+%% Parameters init
+[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
+Gen = ceil(5e4/NP)*C_i;
 
+%% Iteration
 % 30 iterations
-for i=1:30
+for i=1:Total_i
+    r = rc;
     A_set = [];
     mu_Cr = 0.5;
     mu_F = 0.5;
+   
     % Initialization
     X = Initialization(D_size, NP, Xmax, Xmin);
-    fprintf('Gen\t\tMean\t\tMedian\t\tSD\t\t\tFit\t\t\t\tBest\t\tWorst\t\tMV\n')
+    
+    % Title
+    if(i==1 || release==0)
+        fprintf('Gen        Mean         Median         SD         Fit         Best         Worst         MV\n');
+    end
+    
     Record(0, X, r, Prob_k);
     
     for g=1:Gen
@@ -59,6 +76,10 @@ for i=1:30
     if exist(path,'dir')~=7
         mkdir(path);
     end
-    fprintf("Saving...the %d\n", i);
+    if release
+        fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', i, history(end,2), history(end,3), history(end,4), history(end,5), history(end,6), history(end,7), history(end,8));   
+    else
+        fprintf("Saving...the %d\n", i);
+    end
     xlswrite([path,'/',int2str(i),'.xlsx'], history);
 end
