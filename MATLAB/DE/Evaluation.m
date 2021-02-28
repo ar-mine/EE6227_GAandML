@@ -10,7 +10,7 @@ function f_penalty = Evaluation(gen, X, r, f, g, h, release)
 %     [P_fitness, P_idx] = min(X_fitness);
 %     P = X(P_idx,:);
     
-    MV = mean(mean([max(g,0) max(abs(h)-delta,0)], 'all'));
+    MV = mean(mean([g_norm h_norm], 'all'));
     mean_ = mean(f);
     median_ = median(f);
     SD = std(f);

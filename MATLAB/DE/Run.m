@@ -5,24 +5,25 @@ global history;
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 2;
+Prob_index = 10;
 % Debug or Release(0, 1), release will minimize visualize output
-release = 0;
+release = 1;
 % Coefficient of iterations
 C_i = 2;
 Total_i = 30;
 % Parammeters of DE
-F = 0.8;
-Cr = 0;
+F = 0.5;
+Cr = 0.7;
 
 %% Parameters init
-[Prob_k, D_size, NP, Xmin, Xmax, r, r_inc] = Parameters(Prob_index);
+[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
 
 %% Iteration
 % 30 iterations
 for i=1:Total_i
     history = [];
+    r = rc;
     % Initialization
     X = Initialization(D_size, NP, Xmax, Xmin);
     
@@ -62,6 +63,7 @@ for i=1:Total_i
     end
     if release
         fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', i, history(end,2), history(end,3), history(end,4), history(end,5), history(end,6), history(end,7), history(end,8));
+        
     else
         fprintf("Saving...the %d\n", i);
     end
