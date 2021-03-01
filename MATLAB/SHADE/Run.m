@@ -1,21 +1,21 @@
-% DE algorithm
+% SHADE algorithm
 clc;clear;
 global Xmin Xmax;
-global history;
-global c Cr mu_Cr F mu_F A_set p
+global history M_Cr M_F;
+global p H Cr F A_set 
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 6;
+Prob_index = 2;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
-C_i = 2;
+C_i = 3;
 Total_i = 30;
 % Parammeters of DE
- c = 0.05;
- p = 0.15;
-
+p = 0.1;
+H = 10;
+ 
 %% Parameters init
 [Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
@@ -25,9 +25,9 @@ Gen = ceil(5e4/NP)*C_i;
 for i=1:Total_i
     r = rc;
     A_set = [];
-    mu_Cr = 0.5;
-    mu_F = 0.5;
-   
+    M_Cr = ones(H,1)*0.5;
+    M_F  = ones(H,1)*0.5;
+    
     % Initialization
     X = Initialization(D_size, NP, Xmax, Xmin);
     
@@ -38,7 +38,11 @@ for i=1:Total_i
     
     Record(0, X, r, Prob_k);
     
-    for g=1:Gen
+    for gen=1:Gen
+        rand_idx = ceil(rand()*H);
+        mu_Cr = M_Cr(rand_idx);
+        mu_F  = M_F(rand_idx);
+        
         Cr = normrnd(mu_Cr ,0.1, NP, 1);
         Cr(Cr<0) = 0;
         Cr(Cr>1) = 1;
@@ -61,8 +65,8 @@ for i=1:Total_i
         X = Selection(U, X, r, Prob_k);
 
         % Record
-        Record(g, X, r, Prob_k);
-        if mod(g,10) == 0
+        Record(gen, X, r, Prob_k);
+        if mod(gen,10) == 0
             r = r+r_inc;
         end
     end

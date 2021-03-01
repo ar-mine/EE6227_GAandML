@@ -6,12 +6,12 @@ global c Cr mu_Cr F mu_F A_set p
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 4;
+Prob_index = 1;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
 C_i = 2;
-Total_i = 30;
+Total_i = 1;
 % Parammeters of DE
  c = 0.05;
  p = 0.1;
