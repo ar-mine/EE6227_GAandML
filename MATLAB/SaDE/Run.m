@@ -6,7 +6,7 @@ global Crmean Cr
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 2;
+Prob_index = 8;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
@@ -17,8 +17,8 @@ Total_i = 1;
 [Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc, f_solu] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
 % Parammeters of DE
-LP = ceil(Gen*0.1);
-diff = 0.1;
+LP = ceil(Gen*0.05);
+diff = 0.05;
 
 %% Iteration
 % 30 iterations

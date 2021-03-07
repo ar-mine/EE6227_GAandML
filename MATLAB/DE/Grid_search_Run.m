@@ -5,7 +5,7 @@ global history;
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 4;
+Prob_index = 1;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 1;
 % Coefficient of iterations

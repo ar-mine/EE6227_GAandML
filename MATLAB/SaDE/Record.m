@@ -26,10 +26,10 @@ function [mean_, median_, SD] = Record(gen, X, r, Prob_k)
     elseif mod(gen,10) == 0
         Crmean = mean(Crrec);
     else
-        if meadian(Opt_fit) <= lastval
+        if median(Opt_fit) <= lastval
             Crrec = [Crrec Cr]; 
         end
     end
     %%%%% TODO
-    lastval = meadian(Opt_fit);
+    lastval = median(Opt_fit);
 end

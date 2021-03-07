@@ -23,6 +23,7 @@ Gen = ceil(5e4/NP)*C_i;
 %% Iteration
 % 30 iterations
 for i=1:Total_i
+    history = [];
     r = rc;
     A_set = [];
     M_Cr = ones(H,1)*0.5;

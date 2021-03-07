@@ -1,4 +1,4 @@
-% DE algorithm
+% JADE algorithm
 clc;clear;
 global Xmin Xmax;
 global history;
@@ -12,9 +12,9 @@ release = 0;
 % Coefficient of iterations
 C_i = 2;
 Total_i = 1;
-% Parammeters of DE
+% Parammeters of JADE
  c = 0.05;
- p = 0.1;
+ p = 0.15;
 
 %% Parameters init
 [Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc, f_solu] = Parameters(Prob_index);
@@ -23,6 +23,7 @@ Gen = ceil(5e4/NP)*C_i;
 %% Iteration
 % 30 iterations
 for i=1:Total_i
+    history = [];
     r = rc;
     A_set = [];
     mu_Cr = 0.5;
