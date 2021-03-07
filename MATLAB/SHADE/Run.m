@@ -6,18 +6,18 @@ global p H Cr F A_set
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 2;
+Prob_index = 10;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
-C_i = 3;
-Total_i = 30;
+C_i = 2;
+Total_i = 1;
 % Parammeters of DE
-p = 0.1;
-H = 10;
+p = 0.05;
+H = 5;
  
 %% Parameters init
-[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
+[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc, f_solu] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
 
 %% Iteration
@@ -87,3 +87,4 @@ for i=1:Total_i
     end
     xlswrite([path,'/',int2str(i),'.xlsx'], history);
 end
+fprintf(' %d     %2.2e     %2.2e     %2.2e   %2.2e     %2.2e     %2.2e     %2.2e\n', i, history(end,2)-f_solu, history(end,3)-f_solu, history(end,4), history(end,5), history(end,6)-f_solu, history(end,7)-f_solu, history(end,8));

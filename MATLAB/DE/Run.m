@@ -5,18 +5,18 @@ global history;
 
 %% Parameters needed to be changed
 % Choose the problem optimized
-Prob_index = 2;
+Prob_index = 4;
 % Debug or Release(0, 1), release will minimize visualize output
 release = 0;
 % Coefficient of iterations
 C_i = 2;
-Total_i = 30;
+Total_i = 1;
 % Parammeters of DE
-F = 0.5;
-Cr = 0.7;
+F = 1.0;
+Cr = 1.0;
 
 %% Parameters init
-[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc] = Parameters(Prob_index);
+[Prob_k, D_size, NP, Xmin, Xmax, rc, r_inc, f_solu] = Parameters(Prob_index);
 Gen = ceil(5e4/NP)*C_i;
 
 %% Iteration
@@ -63,9 +63,11 @@ for i=1:Total_i
         mkdir(path);
     end
     if release
-        fprintf(' %d     %7f     %7f     %7.4f   %.4e     %7f     %7f     %7e\n', i, history(end,2), history(end,3), history(end,4), history(end,5), history(end,6), history(end,7), history(end,8));   
+        fprintf(' %d     %2.2e     %2.2e     %2.2e   %2.2e     %2.2e     %2.2e     %2.2e\n', i, history(end,2), history(end,3), history(end,4), history(end,5), history(end,6), history(end,7), history(end,8));   
     else
         fprintf("Saving...the %d\n", i);
     end
     xlswrite([path,'/',int2str(i),'.xlsx'], history);
+    
 end
+fprintf(' %d     %2.2e     %2.2e     %2.2e   %2.2e     %2.2e     %2.2e     %2.2e\n', i, history(end,2)-f_solu, history(end,3)-f_solu, history(end,4), history(end,5), history(end,6)-f_solu, history(end,7)-f_solu, history(end,8));

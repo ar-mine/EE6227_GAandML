@@ -9,11 +9,11 @@ function [Prob_k, D_size, NP, xmin, xmax, r, r_inc, f_solu] = Parameters(Prob_in
     %% Number of r relative to problems 
     r_inc1 = 100;
     r1 = ones(9, 1);
-    r_inc2 = 1000000;
+    r_inc2 = 10000000;
     r2 = ones(10, 1)*r_inc2;
     r_inc3 = 1000;
     r3 = ones(15, 1)*r_inc3;
-    r_inc4 = 15;
+    r_inc4 = 10;
     r4 = ones(8, 1)*2;
     r_inc5 = 15;
     r5 = ones(10, 1);
