@@ -2,7 +2,7 @@ function [Random_Forest,Trainningtime]= RF_train(Data,Labels,B_indx,options)
                       
 
 Trainningtime=0;
-nTrees = options.mtry; %number of trees in Random Forest
+nTrees = options.nTree; %number of trees in Random Forest
 method = 'c';
 M = 1:numel(Labels);
 
